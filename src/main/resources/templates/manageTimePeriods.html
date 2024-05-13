@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/appTemplate}">
+
+    <head>
+        <title layout:fragment="title">Manage Time Periods</title>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row" style="margin-top:10px;">Manage Time Periods</h3>
+                <div class="row align-items-center" style="width: 100%; margin-top:5px; margin-bottom: 5px;">
+                    <div class="col text-start align-self-center">
+                        <!--<button class="btn btn-primary border-dark" type="button" style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;">New Customer</button>-->
+                        <a class="btn btn-primary border-dark"
+                            style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;"
+                            th:href="@{/data/newTimePeriod}">New Time Period</a>
+                    </div>
+                </div>
+                <div class="d-inline-flex flex-row align-items-start" style="width:100%">
+                    <div class="table-responsive text-center"
+                        style="width: 100%;margin-top: 15px;height: 400px;background: rgb(210,209,209);">
+                        <div class="row" style="width:100%;">
+                            <div class="col">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Display Name</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="overflow: scroll;">
+                                        <tr th:if="${timePeriods.empty}">
+                                            <td colspan="4">No Time Periods</td>
+                                        </tr>
+                                        <tr th:each="timePeriod : ${timePeriods}">
+                                            <td>
+                                                <form action="#" th:action="@{/data/editTimePeriodForm}"
+                                                    th:object="${timePeriod}" method="post">
+                                                    <input hidden th:value="*{timePeriodId}" name="timePeriodId" />
+                                                    <p><input type="submit" value="Edit" /></p>
+                                                </form>
+                                            </td>
+                                            <td><span th:text="${timePeriod.displayPeriod}"> Display Period </span></td>
+                                            <td><span th:text="${#dates.format(timePeriod.fromDate, 'MM/dd/yyyy')}"> From Date </span></td>
+                                            <td><span th:text="${#dates.format(timePeriod.toDate, 'MM/dd/yyyy')}"> To Date </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${editTimePeriod}" class="row justify-content-center align-items-center" style="width:40%;margin-left:10px;margin-right:10px;">
+                        <h5 style="text-align:center;">New Time Period</h5>
+                        <form action="#" th:action="@{/data/editTimePeriod}" th:object="${timePeriodEdit}"
+                            method="post"  style="width:80%;">
+                            <label class="form-label">Display Period</label>
+                            <input class="form-control form-control-sm" type="text"
+                                th:field="${timePeriodEdit.displayPeriod}" style="font-size:12px;" />
+                            <label class="form-label">From Date</label>
+                            <input class="form-control form-control-sm" type="date" style="font-size:12px;"
+                                th:field="${timePeriodEdit.fromDate}" />
+                            <label class="form-label">To Date</label>
+                            <input class="form-control form-control-sm" type="date" style="font-size:12px;"
+                                th:field="${timePeriodEdit.toDate}" />
+                            <input hidden th:field="${timePeriodEdit.timePeriodId}" />
+                            <input class="btn border-dark btn-primary" type="submit"
+                                style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

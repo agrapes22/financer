@@ -1,0 +1,14 @@
+com\financer\persistence\data\UserDataService.class
+com\financer\persistence\model\Book.class
+com\financer\persistence\repo\CustomerRepository.class
+com\financer\config\Application.class
+com\financer\persistence\repo\UserRepository.class
+com\financer\controller\CustomerController.class
+com\financer\persistence\model\Customer.class
+com\financer\persistence\model\Report.class
+com\financer\persistence\data\CustomerDataService.class
+com\financer\persistence\model\User.class
+com\financer\controller\ApplicationController.class
+com\financer\controller\UserController.class
+com\financer\persistence\data\DataAccessInterface.class
+com\financer\persistence\model\DataModel.class

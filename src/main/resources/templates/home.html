@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/appTemplate}">
+
+    <head>
+        <title layout:fragment="title">Home</title>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:50%" class="d-inline-flex flex-column align-items-center" >
+                <div>
+                    <h1>Hi!</h1>
+                    <p>Welcome to <span th:text="${appName}"></span></p>
+                    <p>This template contains some things:</p>
+                    <ul>
+                        <li><a href="https://projects.spring.io/spring-boot/">Spring boot</a></li>
+                        <li>An example of <a
+                                href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html">Spring
+                                MVC</a> (model/view/controller)</li>
+                        <li><a href="http://www.thymeleaf.org/">Thymeleaf</a> integration for the views</li>
+                        <li>Persistence <a href="https://projects.spring.io/spring-data-jpa/">Spring data jpa</a></li>
+                        <li>Spring boot <a
+                                href="https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html">devtools</a>
+                            to make development easier</li>
+                    </ul>
+                </div>
+                <div>
+                    <form action="#" th:action="@{/createCustomer}" th:object="${customer}" method="post">
+                        <p>Name: <input type="text" th:field="*{name}" /></p>
+                        <p>Contact Name: <input type="text" th:field="*{contactName}" /></p>
+                        <p>Contact Phone: <input type="tel" th:field="*{contactPhone}" /></p>
+                        <p>Address: <input type="text" th:field="*{address}" /></p>
+                        <p>Salesman ID: <input type="number" th:field="*{salesmanId}" /></p>
+                        <p><input type="submit" value="Submit" /></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

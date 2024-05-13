@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/pageTemplate}">
+
+    <head>
+        <title>New Report</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
+        <script>
+            function radioButtonChange() {
+                if (document.getElementById("expenseRadio").checked) {
+                    document.getElementById("expenseType").style.visibility = 'visible';
+                    document.getElementById("expenseType").style.display = 'block';
+                    document.getElementById("revenueType").style.display = 'none';
+                    document.getElementById("customerType").style.display = 'none';
+                } else if (document.getElementById("revenueRadio").checked) {
+                    document.getElementById("revenueType").style.display = 'block';
+                    document.getElementById("expenseType").style.display = 'none';
+                    document.getElementById("customerType").style.display = 'none';
+                } else if (document.getElementById("customerRadio").checked) {
+                    document.getElementById("customerType").style.display = 'block';
+                    document.getElementById("expenseType").style.display = 'none';
+                    document.getElementById("revenueType").style.display = 'none';
+                } else if (document.getElementById("payrollRadio").checked) {
+                    document.getElementById("expenseType").style.visibility = 'hidden';
+                    document.getElementById("expenseType").style.display = 'block';
+                    document.getElementById("revenueType").style.display = 'none';
+                    document.getElementById("customerType").style.display = 'none';
+                }
+            }
+
+            const multiSelectWithoutCtrl = (elemSelector) => {
+
+                let options = document.querySelectorAll(`${elemSelector} option`);
+
+                options.forEach(function (element) {
+                    element.addEventListener("mousedown",
+                        function (e) {
+                            e.preventDefault();
+                            element.parentElement.focus();
+                            this.selected = !this.selected;
+                            return false;
+                        }, false);
+                });
+            }
+            multiSelectWithoutCtrl('#timePeriodSelect')
+        </script>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%; margin-top:20px;" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row">New Report</h3>
+
+                <form class="fw-light" style="width: 100%;margin-bottom: 5px;font-size: 12px;"
+                    th:onchange="radioButtonChange()" action="#" th:action="@{/reports/runReport}" th:object="${report}"
+                    method="post">
+                    <div class="row d-inline-flex flex-row" style="width: 100%;">
+                        <div class="col"><label class="form-label" style="font-size: 14px;">Report Type</label>
+                            <fieldset class="border rounded border-2 border-dark" style="font-size: 14px;width: 50%;">
+                                <div class="form-check"><input id="expenseRadio" class="form-check-input" type="radio"
+                                        name="reportTypeString" th:value="Expense" /><label class="form-check-label"
+                                        for="expenseRadio">Expense
+                                        Report</label></div>
+                                <div class="form-check"><input id="revenueRadio" class="form-check-input" type="radio"
+                                        name="reportTypeString" th:value="Revenue" /><label class="form-check-label"
+                                        for="revenueRadio">Revenue
+                                        Report</label></div>
+                                <div class="form-check"><input id="customerRadio" class="form-check-input" type="radio"
+                                        name="reportTypeString" th:value="Customer" /><label class="form-check-label"
+                                        for="customerRadio">Customer
+                                        Report</label></div>
+                                <div class="form-check"><input id="payrollRadio" class="form-check-input" type="radio"
+                                        name="reportTypeString" th:value="Payroll" /><label class="form-check-label"
+                                        for="payrollRadio">Payroll
+                                        Report</label></div>
+                            </fieldset>
+                        </div>
+                        <div class="col" style="height: 30%;">
+                            <label class="form-label" style="font-size: 14px;">Report Name</label>
+                            <input class="form-control" type="text" style="width: 60%;" th:field="${report.name}"/></div>
+                    </div>
+                    <div class="row d-inline-flex flex-row justify-content-end"
+                        style="width: 100%;height: 50%;margin-top: -20px;">
+                        <div class="col d-inline-flex flex-row justify-content-end">
+                            <div class="border rounded border-2 border-dark d-inline-flex flex-row align-items-center"
+                                style="width: 70%;">
+                                <label class="form-label align-self-start"
+                                    style="font-size: 14px;transform:translateY(-20px)">Parameters</label>
+                                <div class="col d-lg-flex justify-content-lg-end"
+                                    style="margin-left: 5px;margin-right: 15px;height: 80%;">
+                                    <select id="timePeriodSelect[]" name="timePeriodSelect[]" class="form-select"
+                                        multiple style="width: 80%;height: 100%;font-size: 14px;margin-right:10px;">
+                                        <optgroup label="Time Periods">
+                                            <option th:each="timePeriod : ${timePeriods}"
+                                                th:value="${timePeriod.timePeriodId}"
+                                                th:text="${timePeriod.displayPeriod}"></option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div id="expenseType" class="col-5"
+                                    style="margin-left: 10px;margin-right: 5px;height: 80%;visibility:hidden;display:block;">
+                                    <label class="form-label" style="font-size: 14px;">Expense Type</label>
+                                    <select name="expenseType" class="form-select"
+                                        style="margin-right: 5px;font-size: 14px;">
+                                        <option></option>
+                                        <option th:each="type : ${expenseTypes}" th:value="${type.typeId}"
+                                            th:text="${type.typeName}"></option>
+                                    </select>
+                                </div>
+                                <div id="revenueType" class="col-5"
+                                    style="margin-left: 10px;margin-right: 5px;height: 80%;display:none;">
+                                    <label class="form-label" style="font-size: 14px;">Revenue Type</label>
+                                    <select name="revenueType" class="form-select"
+                                        style="margin-right: 5px;font-size: 14px;">
+                                        <option></option>
+                                        <option th:each="type : ${revenueTypes}" th:value="${type.typeId}"
+                                            th:text="${type.typeName}"></option>
+                                    </select>
+                                </div>
+                                <div id="customerType" class="col" style="margin-right: 15px;height: 80%;display:none;">
+                                    <select id="customerIdSelect[]" name="customerIdSelect[]" class="form-select"
+                                        style="width: 100%;height: 100%;font-size: 14px;" multiple>
+                                        <optgroup label="Customers">
+                                            <option th:each="customer : ${customers}" th:value="${customer.customerId}"
+                                                th:text="${customer.name}"></option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input class="btn border-dark btn-primary" type="submit"
+                                style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                            <input hidden type="datetime" name="createdDateRaw" th:value="${#dates.format(#dates.createNow(),'yyyy-MM-dd HH:mm:ss')}"/>
+                        </div>
+                    </div>
+                </form>
+                <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success"></div>
+            </div>
+        </div>
+    </body>
+
+</html>

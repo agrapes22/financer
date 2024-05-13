@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/pageTemplate}">
+
+    <head>
+        <script>
+            function radioButtonChange() {
+                if (document.getElementById("expenseRadio").checked) {
+                    document.getElementById("expenseForm").style.display = '';
+                    document.getElementById("revenueForm").style.display = 'none';
+                    document.getElementById("revenueForm").reset();
+                } else if (document.getElementById("revenueRadio").checked) {
+                    document.getElementById("expenseForm").style.display = 'none';
+                    document.getElementById("revenueForm").style.display = '';
+                    document.getElementById("expenseForm").reset();
+                }
+            }
+        </script>
+        <title>Data Entry</title>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%; margin-top:20px;" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row">Data Entry</h3>
+                <form id="formName" class="fw-lighter" action="#" th:action="@{/data/dataEntry}" method="post"
+                    th:onchange="radioButtonChange()" style="width: 80%;margin-bottom: 5px;font-size:12px;">
+                    <div class="row d-inline-flex flex-row align-items-center" style="width: 100%;">
+                        <div class="col"><label class="form-label" style="font-size: 12px;">Data Type</label>
+                            <fieldset  style="font-size: 12px;width: 10%;">
+                                <div class="form-check">
+                                    <input id="expenseRadio" class="form-check-input" type="radio" name="dataTypeString" th:value="Expense" />
+                                    <label class="form-check-label" for="expenseRadio">Expense</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="revenueRadio" class="form-check-input" type="radio" name="dataTypeString" th:value="Revenue" />
+                                    <label class="form-check-label" for="revenueRadio">Revenue</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div id="expenseForm" class="row gx-5 gy-0" style="width:100%;display:none;">
+                        <div class="col">
+                            <label class="form-label">Date Paid</label>
+                            <input class="form-control form-control-sm" type="date" th:id="datePaid" th:value="${#dates.format(#dates.createNow() , 'MM/dd/yyyy')}" style="font-size:12px;" />
+
+                            <div class="col"><label class="form-label">Time Period</label>
+                                <select id="timePeriodSelectExpense" name="timePeriodSelectExpense" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <optgroup label="Time Periods">
+                                        <option th:each="timePeriod : ${timePeriods}"
+                                            th:value="${timePeriod.timePeriodId}"
+                                            th:text="${timePeriod.displayPeriod}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="col"><label class="form-label">Expense Type</label>
+                                <select id="expenseTypeSelect" name="expenseTypeSelect" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <optgroup label="Expense Types">
+                                        <option th:each="type : ${expenseTypes}"
+                                            th:value="${type.typeId}"
+                                            th:text="${type.typeName}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Expense Cost</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
+                                th:field="${expense.expenseCost}" />
+                            
+                            <label class="form-label">Tax Cost</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
+                                th:field="${expense.taxCost}" />
+
+                            <label class="form-label">Total Cost</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
+                                th:field="${expense.totalCost}" />
+                        </div>
+                    </div>
+
+                    <div id="revenueForm" class="row gx-5 gy-0" style="width:100%;display:none;">
+                        <div class="col">
+                            <div class="col"><label class="form-label">Customer Account</label>
+                                <select id="customerSelect" name="customerSelect" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <optgroup label="Customers">
+                                        <option th:each="customer : ${customers}"
+                                            th:value="${customer.customerId}"
+                                            th:text="${customer.name}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <label class="form-label">Date Received</label>
+                            <input class="form-control form-control-sm" type="date" th:id="dateReceived" th:value="${#dates.format(#dates.createNow() , 'MM/dd/yyyy')}" style="font-size:12px;" />
+
+                            <div class="col"><label class="form-label">Time Period</label>
+                                <select id="timePeriodSelectRevenue" name="timePeriodSelectRevenue" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <optgroup label="Time Periods">
+                                        <option th:each="timePeriod : ${timePeriods}"
+                                            th:value="${timePeriod.timePeriodId}"
+                                            th:text="${timePeriod.displayPeriod}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="col"><label class="form-label">Revenue Type</label>
+                                <select id="revenueTypeSelect" name="revenueTypeSelect" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <optgroup label="Revenue Types">
+                                        <option th:each="type : ${revenueTypes}"
+                                            th:value="${type.typeId}"
+                                            th:text="${type.typeName}"></option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Total Revenue</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
+                                th:field="${revenue.totalRevenue}" />
+                            
+                            <label class="form-label">Adjustment Amount</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
+                                th:field="${revenue.adjustmentAmount}" />
+
+                            <div class="col"><label class="form-label">Adjustment Reason</label>
+                                <select id="adjustmentSelect" name="adjustmentSelect" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <option th:each="type : ${adjTypes}"
+                                        th:value="${type.typeId}"
+                                        th:text="${type.typeName}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <input class="btn border-dark btn-primary" type="submit"
+                        style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                </form>
+                <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success"></div>
+            </div>
+        </div>
+    </body>
+
+</html>

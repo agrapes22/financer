@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/appTemplate}">
+
+    <head>
+        <title layout:fragment="title">Manage Reports</title>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row" style="margin-top:10px;">Manage Reports</h3>
+                <div class="row align-items-center" style="width: 100%; margin-top:5px; margin-bottom: 5px;">
+                    <div class="col text-start align-self-center">
+                        <!--<button class="btn btn-primary border-dark" type="button" style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;">New Customer</button>-->
+                        <a class="btn btn-primary border-dark"
+                            style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;"
+                            th:href="@{/reports/newReport}">New Report</a>
+                    </div>
+                    <!-- <div class="col text-end">
+                        <input class="align-self-end" style="font-size:14px;" type="search"
+                            placeholder="Search Customers" />
+                    </div> -->
+                </div>
+                <div class="table-responsive text-center"
+                    style="width: 80%;margin-top: 15px;height: 400px;background: rgb(210,209,209);">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Created Date</th>
+                                <th>Report Type</th>
+                                <th>Date Range</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody style="overflow: scroll;">
+                            <tr th:if="${reports.empty}">
+                                <td colspan="6">No Reports</td>
+                            </tr>
+                            <tr th:each="report : ${reports}">
+                                <td>
+                                    <form action="#" th:action="@{/reports/viewReport}" th:object="${report}"
+                                        method="post">
+                                        <input hidden th:value="*{reportId}" name="reportId" />
+                                        <p><input type="submit" value="View" /></p>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="#" th:action="@{/reports/exportReport}" th:object="${report}"
+                                        method="post">
+                                        <input hidden th:value="*{reportId}" name="reportId" />
+                                        <p><input type="submit" value="Export" /></p>
+                                    </form>
+                                </td>
+                                <td><span th:text="${report.createdDate}"> Created Date </span></td>
+                                <td><span th:text="${report.reportType?.typeName}"> Report Type </span></td>
+                                <td><span th:text="|${report.fromPeriod?.displayPeriod} - ${report.toPeriod?.displayPeriod}|"> Date Range </span></td>
+                                <td><span th:text="${report.name}"> Name </span></td>
+                                <!-- <td><span th:text="${report.customers}"> Customers </span></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

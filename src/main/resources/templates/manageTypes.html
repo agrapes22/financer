@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/appTemplate}">
+
+    <head>
+        <title layout:fragment="title">Manage Types</title>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row" style="margin-top:10px;">Manage Types</h3>
+                <div class="row align-items-center" style="width: 100%; margin-top:5px; margin-bottom: 5px;">
+                    <div class="col text-start align-self-center">
+                        <!--<button class="btn btn-primary border-dark" type="button" style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;">New Customer</button>-->
+                        <a class="btn btn-primary border-dark"
+                            style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;"
+                            th:href="@{/data/newType}">New Type</a>
+                    </div>
+                </div>
+                <div class="d-inline-flex flex-row align-items-start" style="width:100%">
+                    <div class="table-responsive text-center"
+                        style="width: 100%;margin-top: 15px;height: 340px;background: rgb(210,209,209);">
+                        <div class="row" style="width:100%;">
+                            <div class="col">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Type Name</th>
+                                            <th>Type Category</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="overflow: scroll;">
+                                        <tr th:if="${types.empty}">
+                                            <td colspan="4">No Types</td>
+                                        </tr>
+                                        <tr th:each="type : ${types}">
+                                            <td>
+                                                <form action="#" th:action="@{/data/editTypeForm}" th:object="${type}"
+                                                    method="post">
+                                                    <input hidden th:value="*{typeId}" name="typeId" />
+                                                    <p><input type="submit" value="Edit" /></p>
+                                                </form>
+                                            </td>
+                                            <td><span th:text="${type.typeName}"> Type Name </span></td>
+                                            <td><span th:text="${type.typeCategory}"> Type Category </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${editType}" class="row justify-content-center align-items-start" style="width:40%;margin-left:10px;margin-right:10px;">
+                        <h5 style="text-align:center;">New Type</h5>
+                        <form action="#" th:action="@{/data/editType}" th:object="${typeEdit}" method="post" style="width:80%;">
+                            <label class="form-label">Type Name</label>
+                            <input class="form-control form-control-sm" type="text" th:field="${typeEdit.typeName}"
+                                style="font-size:12px;" />
+                            <label class="form-label">Type Category</label>
+                            <select class="form-select form-select-sm" style="font-size:12px;"
+                                th:field="${typeEdit.typeCategory}">
+                                <option value=""></option>
+                                <option value="Revenue">Revenue</option>
+                                <option value="Expense">Expense</option>
+                                <option value="Adjustment">Adjustment</option>
+                                <option value="Report">Report</option>
+                            </select>
+                            <input hidden th:field="${typeEdit.typeId}" />
+                            <input class="btn border-dark btn-primary" type="submit"
+                                style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
