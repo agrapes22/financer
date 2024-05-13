@@ -9,7 +9,7 @@ import com.financer.persistence.model.User;
 import com.financer.persistence.repo.UserRepository;
 
 @Service
-public class UserDataService implements DataAccessInterface<User> {
+public class UserDataService {
 
     @Autowired
     UserRepository userRepo;
@@ -22,17 +22,14 @@ public class UserDataService implements DataAccessInterface<User> {
         return userRepo.findByUserId(id);
     }
 
-    @Override
     public User create(User t) {
         return userRepo.save(t);
     }
 
-    @Override
     public void delete(User t) {
         userRepo.delete(t);
     }
 
-    @Override
     public User update(User t) {
         return userRepo.save(t);
     }

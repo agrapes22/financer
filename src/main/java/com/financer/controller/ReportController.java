@@ -75,7 +75,8 @@ public class ReportController {
             report.setCustomerIds(ids);
         }
 
-        String dataType = expenseTypeId.isPresent() ? expenseTypeId.get() : (reveneueTypeId.isPresent() ? reveneueTypeId.get() : "");
+        //For use when generating report data records
+        //String dataType = expenseTypeId.isPresent() ? expenseTypeId.get() : (reveneueTypeId.isPresent() ? reveneueTypeId.get() : "");
 
         try {
             SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
