@@ -46,10 +46,6 @@ public class UserController {
 
     @PostMapping("/edit")
     public String editUser(@ModelAttribute User user, Model model) {
-        // Date date = user.getHireDate();
-        // DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        // String strDate = dateFormat.format(date);
-        // user.setHireDate(user.getHireDate());
         User u = uds.update(user);
         model.addAttribute("user", u);
         model.addAttribute("successMessage", "User updated!");
