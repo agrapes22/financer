@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Customer model. Related to revenue and report models
+ */
 package com.financer.persistence.model;
 
 import java.io.Serializable;

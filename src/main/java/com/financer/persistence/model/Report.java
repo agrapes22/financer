@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Report model. Used to compile data for users to view and export
+ */
 package com.financer.persistence.model;
 
 import java.sql.Date;
@@ -18,11 +24,9 @@ public class Report {
 
     private String name;
 
-    //private long typeId;
     private Date createdDate;
-    //private long timePeriodFromId;
-    //private long timePeriodToId;
     private String customerIds;
+    private String types;
 
     @ManyToOne
     @JoinColumn(name="timePeriodFromId")
@@ -90,7 +94,11 @@ public class Report {
     public void setCustomerIds(String customerIds) {
         this.customerIds = customerIds;
     }
-
-    
+    public String getTypes() {
+        return this.types;
+    }
+    public void setTypes(String types) {
+        this.types = types;
+    }
 
 }

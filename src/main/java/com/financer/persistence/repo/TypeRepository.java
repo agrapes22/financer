@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Type Repository. Extends JPA repository for handing CRUD operations for Type model
+ */
 package com.financer.persistence.repo;
 
 import java.util.List;
@@ -24,4 +30,19 @@ public interface TypeRepository extends JpaRepository<Type, Long> {
 
     @Query("SELECT t FROM types t WHERE t.typeName = :typeName AND t.typeCategory = :typeCategory")
     Type findTypeByNameAndCategory(@Param("typeName") String typeName, @Param("typeCategory") String typeCategory);
+
+    @Query("SELECT t FROM types t WHERE t.typeName = 'Customer' AND t.typeCategory ='Report'")
+    Type findCustomerReportType();
+
+    @Query("SELECT t FROM types t WHERE t.typeName = 'Revenue' AND t.typeCategory = 'Report'")
+    Type findRevenueReportType();
+
+    @Query("SELECT t FROM types t WHERE t.typeName = 'Expense' AND t.typeCategory = 'Report'")
+    Type getExpenseReportType();
+    
+    @Query("SELECT t FROM types t WHERE t.typeName = 'Payroll' AND t.typeCategory = 'Report'")
+    Type getPayrollReportType();
+
+    @Query("SELECT t FROM types t WHERE typeId IN :ids AND typeCategory = :categoryName")
+    List<Type> findTypesByIdsAndCategoryIn(@Param("ids") List<Long> ids, @Param("categoryName") String categoryName);
 }

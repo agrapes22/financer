@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Revenue model. Stores revenue data entered by users.
+ */
 package com.financer.persistence.model;
 
 import java.sql.Date;
@@ -29,8 +35,8 @@ public class Revenue {
     private Customer customer;
 
     private Date dateReceived;
-    private double totalRevenue;
-    private double adjustmentAmount;
+    private double totalRevenue = 0.0;
+    private double adjustmentAmount = 0.0;
 
     @ManyToOne
     @JoinColumn(name="adjustmentTypeId")
@@ -76,11 +82,11 @@ public class Revenue {
         this.dateReceived = dateReceived;
     }
 
-    public double gettotalRevenue() {
+    public double getTotalRevenue() {
         return totalRevenue;
     }
 
-    public void settotalRevenue(double totalRevenue) {
+    public void setTotalRevenue(double totalRevenue) {
         this.totalRevenue = totalRevenue;
     }
 

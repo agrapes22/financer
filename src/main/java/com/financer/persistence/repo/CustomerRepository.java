@@ -1,9 +1,12 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Customer Repository. Extends JPA repository for handing CRUD operations for Customer model
+ */
 package com.financer.persistence.repo;
 
 import java.util.List;
-
-//import java.util.ArrayList;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

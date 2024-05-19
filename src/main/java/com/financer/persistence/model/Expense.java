@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Expense model. Stores expenses entered by users. Related to reports model.
+ */
 package com.financer.persistence.model;
 
 import java.sql.Date;
@@ -25,9 +31,9 @@ public class Expense {
     private Type type;
 
     private Date datePaid;
-    private double totalCost;
-    private double taxCost;
-    private double expenseCost;
+    private double totalCost = 0.0;
+    private double taxCost = 0.0;
+    private double expenseCost = 0.0;
 
     public long getexpenseId() {
         return expenseId;

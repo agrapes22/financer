@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Customer data service for database actions related to customer model
+ */
 package com.financer.persistence.data;
 
 import java.util.ArrayList;

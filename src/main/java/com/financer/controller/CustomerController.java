@@ -1,3 +1,10 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Customer controller for customer model and related views
+ */
+
 package com.financer.controller;
 
 import com.financer.persistence.data.CustomerDataService;

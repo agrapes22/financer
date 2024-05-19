@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Type model. Static types maintained by administrative users to prevent bad user input in type fields.
+ */
 package com.financer.persistence.model;
 
 import java.io.Serializable;

@@ -1,3 +1,9 @@
+/* 
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Data controller for data entry, and administrative types and time periods
+*/
 package com.financer.controller;
 
 import java.util.List;
@@ -136,7 +142,7 @@ public class DataController {
             Type t = ds.findTypeByNameAndCategory(dataTypeString, "Revenue");
             revenue.setType(t);
 
-            if (adjReason.isPresent()) {
+            if (adjReason.isPresent() && !adjReason.get().equals("")) {
                 Type type = ds.findTypeById(Long.parseLong(adjReason.get()));
                 revenue.setAdjustmentReason(type);
             }

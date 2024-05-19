@@ -1,3 +1,9 @@
+/*
+ * Adriel Swisher
+ * CST 452
+ * 
+ * TimePeriod model. Static time periods maintained by administrative users to prevent bad user input in time period fields.
+ */
 package com.financer.persistence.model;
 
 import java.sql.Date;

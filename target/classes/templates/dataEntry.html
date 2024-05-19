@@ -14,7 +14,21 @@
                     document.getElementById("revenueForm").style.display = '';
                     document.getElementById("expenseForm").reset();
                 }
-            }
+            };
+            function calcExpense() {
+                var base = 10;
+                var expenseVal = document.getElementById('expenseCost').value;
+                var taxVal = document.getElementById('taxCost').value;
+                var totalCost = document.getElementById('totalCost');
+                if (expenseVal !== '') {
+                    if (taxVal === '')
+                        taxVal = 0;
+                    totalCost.value = (parseFloat(expenseVal) + parseFloat(taxVal)).toFixed(2);
+                }
+                else {
+                    totalCost.value = '';
+                }
+            };
         </script>
         <title>Data Entry</title>
     </head>
@@ -27,13 +41,15 @@
                     th:onchange="radioButtonChange()" style="width: 80%;margin-bottom: 5px;font-size:12px;">
                     <div class="row d-inline-flex flex-row align-items-center" style="width: 100%;">
                         <div class="col"><label class="form-label" style="font-size: 12px;">Data Type</label>
-                            <fieldset  style="font-size: 12px;width: 10%;">
+                            <fieldset style="font-size: 12px;width: 10%;">
                                 <div class="form-check">
-                                    <input id="expenseRadio" class="form-check-input" type="radio" name="dataTypeString" th:value="Expense" />
+                                    <input id="expenseRadio" class="form-check-input" type="radio" name="dataTypeString"
+                                        th:value="Expense" />
                                     <label class="form-check-label" for="expenseRadio">Expense</label>
                                 </div>
                                 <div class="form-check">
-                                    <input id="revenueRadio" class="form-check-input" type="radio" name="dataTypeString" th:value="Revenue" />
+                                    <input id="revenueRadio" class="form-check-input" type="radio" name="dataTypeString"
+                                        th:value="Revenue" />
                                     <label class="form-check-label" for="revenueRadio">Revenue</label>
                                 </div>
                             </fieldset>
@@ -43,7 +59,7 @@
                     <div id="expenseForm" class="row gx-5 gy-0" style="width:100%;display:none;">
                         <div class="col">
                             <label class="form-label">Date Paid</label>
-                            <input class="form-control form-control-sm" type="date" th:id="datePaid" th:value="${#dates.format(#dates.createNow() , 'MM/dd/yyyy')}" style="font-size:12px;" />
+                            <input class="form-control form-control-sm" type="date" id="datePaid" name="datePaid" th:value="${#dates.format(#dates.createNow() , 'yyyy-MM-dd')}" style="font-size:12px;" />
 
                             <div class="col"><label class="form-label">Time Period</label>
                                 <select id="timePeriodSelectExpense" name="timePeriodSelectExpense" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
@@ -67,16 +83,13 @@
                         </div>
                         <div class="col">
                             <label class="form-label">Expense Cost</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
-                                th:field="${expense.expenseCost}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" onkeyup="calcExpense()" type="number" step="0.01" id="expenseCost" name="expenseCost" value="0.00" placeholder="$0.00"/>
                             
                             <label class="form-label">Tax Cost</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
-                                th:field="${expense.taxCost}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" onkeyup="calcExpense()" type="number" step="0.01" id="taxCost" name="taxCost" value="0.00" placeholder="$0.00"/>
 
                             <label class="form-label">Total Cost</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
-                                th:field="${expense.totalCost}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number" id="totalCost" name="totalCost" readonly value="0.00" placeholder="$0.00"/>
                         </div>
                     </div>
 
@@ -93,7 +106,7 @@
                             </div>
 
                             <label class="form-label">Date Received</label>
-                            <input class="form-control form-control-sm" type="date" th:id="dateReceived" th:value="${#dates.format(#dates.createNow() , 'MM/dd/yyyy')}" style="font-size:12px;" />
+                            <input class="form-control form-control-sm" type="date" id="dateReceived" name="dateReceived" th:value="${#dates.format(#dates.createNow() , 'yyyy-MM-dd')}" style="font-size:12px;"/>
 
                             <div class="col"><label class="form-label">Time Period</label>
                                 <select id="timePeriodSelectRevenue" name="timePeriodSelectRevenue" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
@@ -117,15 +130,14 @@
                         </div>
                         <div class="col">
                             <label class="form-label">Total Revenue</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
-                                th:field="${revenue.totalRevenue}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number" step="0.01" id="totalRevenue" name="totalRevenue" value="0.00" placeholder="$0.00"/>
                             
                             <label class="form-label">Adjustment Amount</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="number"
-                                th:field="${revenue.adjustmentAmount}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="number" step="0.01" id="adjustmentAmount" name="adjustmentAmount" value="0.00" placeholder="$0.00"/>
 
                             <div class="col"><label class="form-label">Adjustment Reason</label>
                                 <select id="adjustmentSelect" name="adjustmentSelect" class="form-select" style="width: 80%;height: 100%;font-size: 12px;margin-right:10px;">
+                                    <option></option>
                                     <option th:each="type : ${adjTypes}"
                                         th:value="${type.typeId}"
                                         th:text="${type.typeName}"></option>

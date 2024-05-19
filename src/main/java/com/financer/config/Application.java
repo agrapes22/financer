@@ -1,3 +1,9 @@
+/* 
+ * Adriel Swisher
+ * CST 452
+ * 
+ * Application class to run Spring application and establish layout dialect for Thymeleaf layouts
+*/
 package com.financer.config;
 
 import org.springframework.boot.SpringApplication;
