@@ -1,9 +1,8 @@
 com\financer\controller\ReportController$1.class
 com\financer\persistence\repo\DataRepository.class
 com\financer\persistence\data\UserDataService.class
-com\financer\persistence\model\Book.class
+com\financer\config\PasswordEncoder.class
 com\financer\controller\DataController.class
-com\financer\persistence\model\GroupedRevenue.class
 com\financer\config\Application.class
 com\financer\persistence\repo\RevenueRepository.class
 com\financer\persistence\model\Revenue.class
@@ -26,11 +25,10 @@ com\financer\controller\ReportController.class
 com\financer\persistence\repo\CustomerRepository.class
 com\financer\persistence\repo\EmployeePayrollRepository.class
 com\financer\persistence\model\Expense.class
-com\financer\persistence\data\JpaConverterJson.class
 com\financer\persistence\repo\UserRepository.class
+com\financer\persistence\data\UserAuthDetailsService.class
 com\financer\controller\CustomerController.class
 com\financer\persistence\model\Customer.class
 com\financer\persistence\data\ReportDataService.class
 com\financer\persistence\model\EmployeePayroll.class
-com\financer\persistence\data\UserAuthService.class
 com\financer\persistence\repo\ExpenseRepository.class

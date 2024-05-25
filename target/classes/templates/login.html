@@ -10,18 +10,20 @@
         <div layout:fragment="content">
             <div style="width:80%; margin-top:20px;" class="d-inline-flex flex-column align-items-center">
                 <h3 class="d-inline-flex flex-row">Login</h3>
-                <form class="fw-lighter" action="#" th:action="@{/login}" th:object="${user}" method="post" style="width: 30%;margin-bottom: 5px;font-size:12px;">
+                <form class="fw-lighter" th:action="@{/login}" method="post"
+                    style="width: 30%;margin-bottom: 5px;font-size:12px;">
                     <div class="row">
                         <div class="col">
                             <label class="form-label">Username</label>
-                            <input class="form-control form-control-sm" type="text" th:field="${user.username}"
-                                style="font-size:12px;" />
+                            <input class="form-control form-control-sm" type="text" placeholder="Username" id="username"
+                                name="username" style="font-size:12px;" />
 
                             <label class="form-label">Password</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="password" th:field="${user.passwordHash}" />
-                    </div>
-                    <input class="btn border-dark btn-primary" type="submit"
-                        style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="password"
+                                placeholder="Password" id="password" name="password" />
+                        </div>
+                        <input class="btn border-dark btn-primary" type="submit"
+                            style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
                 </form>
                 <div th:if="${deniedMessage}" th:text="${deniedMessage}" class="alert alert-failure"></div>
             </div>

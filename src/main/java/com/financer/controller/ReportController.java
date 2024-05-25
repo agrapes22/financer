@@ -21,7 +21,6 @@ import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.QuoteMode;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.financer.persistence.data.CustomerDataService;
 import com.financer.persistence.data.DataService;
@@ -82,6 +82,19 @@ public class ReportController {
         return "newReport";
     }
 
+    @PostMapping("/deleteReport")
+    public String deleteReport(@ModelAttribute Report report, Model model, RedirectAttributes redirectAttrs) {
+        try {
+            ds.deleteReportDataRecords(report);
+            rds.delete(report);
+            redirectAttrs.addFlashAttribute("deleteMessage", "Report successfully deleted");
+        }
+        catch (Exception e) {
+            redirectAttrs.addFlashAttribute("errorMessage", "Could not delete");
+        }
+        return "redirect:/reports/manageReports";
+    }
+
     @PostMapping("/runReport")
     public String runReport(@ModelAttribute Report report, Model model,
             @RequestParam("reportTypeString") String reportTypeString,
@@ -91,22 +104,20 @@ public class ReportController {
             @RequestParam("customerIdSelect[]") Optional<String[]> customerIds,
             @RequestParam("createdDateRaw") String createdDate)
     {
-        List<Customer> customers = new ArrayList<>();
 
         if (customerIds.isPresent()) {
-            customers = cds.findCustomersByIdsIn(customerIds.get());
             String ids = String.join(", ", customerIds.get());
             report.setCustomerIds(ids);
         }
         
         String revenueType = "";
-        if (reveneueTypeId.isPresent()) {
+        if (reveneueTypeId.isPresent() && !reveneueTypeId.get().isEmpty()) {
             revenueType = reveneueTypeId.get();
             report.setTypes(revenueType);
         }
 
         String expenseType = "";
-        if (expenseTypeId.isPresent()) {
+        if (expenseTypeId.isPresent() && !expenseTypeId.get().isEmpty()) {
             expenseType = expenseTypeId.get();
             report.setTypes(expenseType);
         }
@@ -160,6 +171,8 @@ public class ReportController {
 
         model.addAttribute("headings", headings);
         model.addAttribute("jsonDataList", jsonData);
+        model.addAttribute("reportName", r.getName());
+        model.addAttribute("report", r);
         return "viewReport";
     }
 

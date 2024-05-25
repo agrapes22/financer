@@ -25,4 +25,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c FROM Customer c WHERE customerId IN :ids")
     List<Customer> findCustomersByIdsIn(@Param("ids") List<Long> ids);
+
+    List<Customer> findByNameContainsIgnoreCaseOrContactNameContainsIgnoreCase(String name, String contactName);
 }

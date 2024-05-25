@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/pageTemplate}">
+
+    <head>
+        <title>Account</title>
+        <script>
+            function showDiv() {
+                document.getElementById("changePassword").style.display = 'block';
+                document.getElementById("changePasswordButton").style.display = 'none';
+            };
+            function passConfirm() {
+                var regex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,10}$/;
+                if (document.getElementById("oldPass").value ==
+                    document.getElementById("newPass").value) {
+                    document.getElementById("passMessage").style.color = "Red";
+                    document.getElementById("passMessage").innerHTML = "Old and new password cannot be the same";
+                    document.getElementById("submitForm").disabled = true;
+                }
+                else if (!regex.test(document.getElementById("newPass").value)) {
+                    document.getElementById("passMessage").style.color = "Red";
+                    document.getElementById("passMessage").innerHTML = "Password must be between 6-10 characters and" +
+                        "contain 1 number and 1 special character (! @ # $ % ^ & *)";
+                    document.getElementById("submitForm").disabled = true;
+                }
+                else {
+                    document.getElementById("passMessage").style.color = "";
+                    document.getElementById("passMessage").innerHTML = "";
+                    document.getElementById("submitForm").disabled = false;
+                }
+            };
+            function passConfirmNew() {
+                if (document.getElementById("newPass").value !=
+                    document.getElementById("confirmNew").value) {
+                    document.getElementById("passMessage").style.color = "Red";
+                    document.getElementById("passMessage").innerHTML = "New password and confirm password do not match";
+                    document.getElementById("submitForm").disabled = true;
+                } else {
+                    document.getElementById("passMessage").style.color = "";
+                    document.getElementById("passMessage").innerHTML = "";
+                    document.getElementById("submitForm").disabled = false;
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div layout:fragment="content">
+            <div style="width:80%; margin-top:20px;" class="d-inline-flex flex-column align-items-center">
+                <h3 class="d-inline-flex flex-row">Your Account</h3>
+                <form class="fw-lighter" action="#" th:action="@{/users/updateAccount}" th:object="${user}" method="post"
+                    style="width: 100%;margin-bottom: 5px;font-size:12px;">
+                    <div class="row gx-5 gy-0 m-auto">
+                        <div class="col">
+                            <label class="form-label">Username</label>
+                            <input class="form-control form-control-sm" type="text" th:field="${user.username}" readonly
+                                style="font-size:12px;" />
+                            <input hidden th:field="${user.userId}" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Name</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="text" required
+                                th:field="${user.name}" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label">Email</label>
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="text"
+                                th:field="${user.email}" readonly />
+                        </div>
+                    </div>
+                    <div class="row gx-5 gy-0 m-auto">
+                        <div class="col"><label class="form-label">Hire Date</label>
+                            <input class="form-control form-control-sm" type="date" style="font-size:12px;"
+                                th:field="${user.hireDate}" readonly />
+                        </div>
+                        <div class="col"><label class="form-label">Account Type</label>
+                            <input hidden th:field="${user.accountType}"/>
+                            <th:block th:switch="${user.accountType}">
+                                <th:block th:case="R"><input class="form-control form-control-sm" type="text"
+                                        value="Regular User" style="font-size:12px;" readonly /> </th:block>
+                                <th:block th:case="A"><input class="form-control form-control-sm" type="text"
+                                        value="Admin User" style="font-size:12px;" readonly /> </th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                    <div id="changePassword" name="changePassword" class="row gx-5 gy-0 m-auto"
+                        style="width:30%;padding-top:10px;display:none;">
+                        <div class="col">
+                            <label class="form-label">Current Password</label>
+                            <input class="form-control form-control-sm" id="oldPass" name="oldPass"
+                                style="font-size:12px;" type="password" />
+                            <label class="form-label">New Password</label>
+                            <input class="form-control form-control-sm" id="newPass" name="newPass"
+                                onkeyup='passConfirm();' style="font-size:12px;" type="password" />
+                            <label class="form-label">Confirm New Password</label>
+                            <input class="form-control form-control-sm" id="confirmNew" name="confirmNew"
+                                onkeyup='passConfirmNew();' style="font-size:12px;" type="password"/>
+                            <span id="passMessage"></span>
+                        </div>
+                    </div>
+                    <input class="btn border-dark btn-primary" type="button" id="changePasswordButton"
+                        onclick="showDiv()" value="Change Password"
+                        style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);display:block;" />
+                    <input class="btn border-dark btn-primary" type="submit" id="submitForm"
+                        style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
+                </form>
+                <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-warning p-1" style="font-size:14px;margin-top:10px;"></div>
+                <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success p-1" style="font-size:14px;margin-top:10px;"></div>
+            </div>
+        </div>
+    </body>
+
+</html>

@@ -32,4 +32,8 @@ public class ReportDataService {
         return rr.findByReportId(reportId);
     }
 
+    public void delete(Report report) {
+        rr.delete(report);
+    }
+
 }

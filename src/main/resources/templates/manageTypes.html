@@ -17,6 +17,31 @@
                             style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;"
                             th:href="@{/data/newType}">New Type</a>
                     </div>
+                    <div th:if="${successMessage}" style="font-size:12px;width:25%;"
+                        class="alert alert-success alert-dismissible fade show p-1 col col-md-3 col-md-offset-4 d-inline-flex flex-row" role="alert">
+                        <span th:text="${successMessage}" class="col text-center align-self-center"></span>
+                            <button type="button" class="close align-self-end" data-dismiss="alert" aria-label="Close"
+                            style="border:0px;background-color:inherit;" id="clearFilter" name="clearFilter">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div th:if="${deleteMessage}" style="font-size:12px;width:25%;"
+                        class="alert alert-success alert-dismissible fade show p-1 col col-md-3 col-md-offset-4 d-inline-flex flex-row" role="alert">
+                        <span th:text="${deleteMessage}" class="col text-center align-self-center"></span>
+                            <button type="button" class="close align-self-end" data-dismiss="alert" aria-label="Close"
+                            style="border:0px;background-color:inherit;" id="clearFilter" name="clearFilter">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div th:if="${errorMessage}" style="font-size:12px;width:25%;"
+                        class="alert alert-danger alert-dismissible fade show p-1 col-md-3 col d-inline-flex flex-row" role="alert">
+                        <span th:text="${errorMessage}" class="col text-center align-self-center"></span>
+                            <button type="button" class="close align-self-end" data-dismiss="alert" aria-label="Close"
+                            style="border:0px;background-color:inherit;" id="clearFilter" name="clearFilter">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="col text-end align-self-end"></div>
                 </div>
                 <div class="d-inline-flex flex-row align-items-start" style="width:100%">
                     <div class="table-responsive text-center"
@@ -26,21 +51,28 @@
                                 <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th colspan="2">Manage</th>
                                             <th>Type Name</th>
                                             <th>Type Category</th>
                                         </tr>
                                     </thead>
                                     <tbody style="overflow: scroll;">
                                         <tr th:if="${types.empty}">
-                                            <td colspan="4">No Types</td>
+                                            <td colspan="5">No Types</td>
                                         </tr>
                                         <tr th:each="type : ${types}">
                                             <td>
                                                 <form action="#" th:action="@{/data/editTypeForm}" th:object="${type}"
                                                     method="post">
                                                     <input hidden th:value="*{typeId}" name="typeId" />
-                                                    <p><input type="submit" value="Edit" /></p>
+                                                    <p><input type="submit" style="font-size:12px;" value="Edit" /></p>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form action="#" th:action="@{/data/deleteType}" th:object="${type}"
+                                                    method="post">
+                                                    <input hidden th:value="*{typeId}" name="typeId" />
+                                                    <p><input type="submit" style="font-size:12px;" value="Delete" onclick="return confirm('Are you sure you want to delete this type?');"/></p>
                                                 </form>
                                             </td>
                                             <td><span th:text="${type.typeName}"> Type Name </span></td>

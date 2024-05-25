@@ -10,54 +10,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.financer.persistence.data.UserAuthService;
-
+import com.financer.persistence.data.UserAuthDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Autowired
-    UserAuthService userAuthService;
+        @Autowired
+        UserDetailsService userAuthService;
 
-    @Autowired
-    BCryptPasswordEncoder encoder;
+        @Autowired
+        BCryptPasswordEncoder encoder;
 
-    @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userAuthService);
-        authProvider.setPasswordEncoder(encoder);
-        return authProvider;
-    }
+        @Bean
+        protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+                http.userDetailsService(userAuthService());
+                http.authorizeHttpRequests(requests -> requests
+                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                                .antMatchers("/assets/**").permitAll()
+                                .antMatchers("/data/manage***").hasAuthority("ROLE_ADMIN")
+                                .antMatchers("/users/manage***").hasAuthority("ROLE_ADMIN")
+                                .anyRequest()
+                                .authenticated()
+                                )
+                                .exceptionHandling(exception -> exception
+                                                .accessDeniedPage("/accessDenied"))
+                                .formLogin(login -> login
+                                                .loginPage("/login").permitAll()
+                                                .usernameParameter("username")
+                                                .passwordParameter("password")
+                                                .failureUrl("/denied")
+                                                .defaultSuccessUrl("/reports/manageReports")
+                                )
+                                .logout(logout -> logout
+                                                .logoutUrl("/logout")
+                                                .invalidateHttpSession(true)
+                                                .logoutSuccessUrl("/login"));
 
-	@Bean
-	protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.userDetailsService(userAuthService());
-        http.authenticationProvider(authProvider())
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .antMatchers("/assets/**").permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .formLogin(login -> login
-                        .loginPage("/login").permitAll()
-                        .failureUrl("/denied"))
-                .logout(logout -> logout
-                        .invalidateHttpSession(true)
-                        .logoutSuccessUrl("/login"));
+                return http.build();
+        }
 
-		return http.build();
-	}
+        @Bean
+        public UserDetailsService userDetailsService() {
+                return new UserAuthDetailsService();
+        }
 
-	private UserDetailsService userAuthService() {
-        return userAuthService;
-    }
+        private UserDetailsService userAuthService() {
+                return userAuthService;
+        }
 }

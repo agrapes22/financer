@@ -93,9 +93,16 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
             List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-            authorities.add(new SimpleGrantedAuthority("user"));
+            switch(this.getAccountType()) {
+                case "R":
+                    authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                break;
+                case "A":
+                    authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                break;
+            }
             return authorities;
-        }
+    }
 
     @Override
     public String getPassword() {

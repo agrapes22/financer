@@ -9,8 +9,8 @@
     <body>
         <div layout:fragment="content">
             <div style="width:80%" class="d-inline-flex flex-column align-items-center">
-                <h3 class="d-inline-flex flex-row" style="margin-top:10px;">Manage Reports</h3>
-                <div class="row align-items-center" style="width: 100%; margin-top:5px; margin-bottom: 5px;">
+                <h3 class="d-inline-flex flex-row" style="margin-top:15px;">Manage Reports</h3>
+                <div class="row align-items-center" style="width: 105%; margin-top:5px;">
                     <div class="col text-start align-self-center">
                         <!--<button class="btn btn-primary border-dark" type="button" style="background: rgb(210,209,209);color: rgb(33,37,41); font-size:14px;">New Customer</button>-->
                         <a class="btn btn-primary border-dark"
@@ -21,14 +21,30 @@
                         <input class="align-self-end" style="font-size:14px;" type="search"
                             placeholder="Search Customers" />
                     </div> -->
+                    <div th:if="${deleteMessage}" style="font-size:12px;width:25%;"
+                        class="alert alert-success alert-dismissible fade show p-1 col col-md-3 col-md-offset-4 d-inline-flex flex-row" role="alert">
+                        <span th:text="${deleteMessage}" class="col text-center align-self-center"></span>
+                            <button type="button" class="close align-self-end" data-dismiss="alert" aria-label="Close"
+                            style="border:0px;background-color:inherit;" id="clearFilter" name="clearFilter">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div th:if="${errorMessage}" style="font-size:12px;width:25%;"
+                        class="alert alert-danger alert-dismissible fade show p-1 col-md-3 col d-inline-flex flex-row" role="alert">
+                        <span th:text="${errorMessage}" class="col text-center align-self-center"></span>
+                            <button type="button" class="close align-self-end" data-dismiss="alert" aria-label="Close"
+                            style="border:0px;background-color:inherit;" id="clearFilter" name="clearFilter">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="col text-end align-self-end"></div>
                 </div>
                 <div class="table-responsive text-center"
-                    style="width: 80%;margin-top: 15px;height: 400px;background: rgb(210,209,209);">
+                    style="width: 80%;margin-top:-5px;height: 400px;background: rgb(210,209,209);">
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th></th>
+                                <th colspan="3">Manage</th>
                                 <th>Created Date</th>
                                 <th>Report Type</th>
                                 <th>Date Range</th>
@@ -40,18 +56,25 @@
                                 <td colspan="6">No Reports</td>
                             </tr>
                             <tr th:each="report : ${reports}">
-                                <td>
+                                <td style="padding-right:0px;">
                                     <form action="#" th:action="@{/reports/viewReport}" th:object="${report}"
                                         method="post">
                                         <input hidden th:value="*{reportId}" name="reportId" />
-                                        <p><input type="submit" value="View" /></p>
+                                        <p><input type="submit" style="font-size:12px;" value="View" /></p>
                                     </form>
                                 </td>
-                                <td>
+                                <td style="padding-right:0px;padding-left:0px;">
                                     <form action="#" th:action="@{/reports/exportReport}" th:object="${report}"
                                         method="post">
                                         <input hidden th:value="*{reportId}" name="reportId" />
-                                        <p><input type="submit" value="Export" /></p>
+                                        <p><input type="submit" style="font-size:12px;" value="Export" /></p>
+                                    </form>
+                                </td>
+                                <td style="padding-right:0px;padding-left:0px;">
+                                    <form action="#" th:action="@{/reports/deleteReport}" th:object="${report}"
+                                        method="post">
+                                        <input hidden th:value="*{reportId}" name="reportId" />
+                                        <input type="submit" style="font-size:12px;" value="Delete" onclick="return confirm('Are you sure you want to delete this report?');"/>
                                     </form>
                                 </td>
                                 <td><span th:text="${report.createdDate}"> Created Date </span></td>

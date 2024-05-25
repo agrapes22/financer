@@ -10,16 +10,20 @@ package com.financer.controller;
 import com.financer.persistence.data.CustomerDataService;
 import com.financer.persistence.model.Customer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/customers")
@@ -40,10 +44,13 @@ public class CustomerController {
     }
 
     @GetMapping("/manageCustomers")
-    public String getCustomer(Model model) {
+    public String getCustomer(Model model, RedirectAttributes redirectAttrs) {
         List<Customer> customers = cds.findAll();
-        //Customer c = cds.findById(id);
-        model.addAttribute("customers", customers);
+
+        if (!model.containsAttribute("customers")) {
+            model.addAttribute("customers", customers);
+        }
+
         return "manageCustomers";
     }
 
@@ -61,9 +68,14 @@ public class CustomerController {
     }
 
     @PostMapping("/deleteCustomer")
-    public String deleteCustomer(@ModelAttribute Customer customer, Model model) {
-        cds.delete(customer);
-        return "customers";
+    public String deleteCustomer(@ModelAttribute Customer customer, Model model, RedirectAttributes redirectAttrs) {
+        try {
+            cds.delete(customer);
+            redirectAttrs.addFlashAttribute("deleteMessage", "Customer successfully deleted");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttrs.addFlashAttribute("errorMessage", "Customer has revenue records associated, cannot delete");
+        }
+        return "redirect:/customers/manageCustomers";
     }
 
     @PostMapping("/edit")
@@ -73,5 +85,31 @@ public class CustomerController {
         model.addAttribute("id", c.getCustomerId());
         model.addAttribute("successMessage", "Customer updated!");
         return "editCustomer";
+    }
+
+    @GetMapping("/searchCustomers")
+    public String searchCustomers(@RequestParam("search") String search, Model model, RedirectAttributes redirectAttrs) {
+        List<Customer> customers = new ArrayList<>();
+        
+        if (search.matches("[0-9]+")) {
+            Long searchId = Long.parseLong(search);
+            Customer c = cds.findById(searchId);
+            if (c != null)
+                customers.add(c);
+        }
+
+        if (customers.isEmpty()) {
+            customers = cds.findCustomersBySearchTerm(search);
+        }
+
+        redirectAttrs.addFlashAttribute("customers", customers);
+        redirectAttrs.addFlashAttribute("customerSearch", "Results for \"" + search + "\"");
+
+        return "redirect:/customers/manageCustomers";
+    }
+
+    @GetMapping("/clearFilter")
+    public String clearFilter(Model model) {
+        return "redirect:/customers/manageCustomers";
     }
 }

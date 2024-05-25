@@ -3,46 +3,78 @@
     xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layouts/pageTemplate}">
 
     <head>
-        <title>Edit User</title>
+        <title th:text="${user.userId &gt; 0 ? 'Edit User' : 'New User'}"></title>
+        <script>
+            function passConfirmNew() {
+                if (document.getElementById("newPass").value !=
+                    document.getElementById("confirmNew").value) {
+                    document.getElementById("passMessage").style.color = "Red";
+                    document.getElementById("passMessage").innerHTML = "New password and confirm password do not match";
+                    document.getElementById("submitForm").disabled = true;
+                } else {
+                    document.getElementById("passMessage").style.color = "";
+                    document.getElementById("passMessage").innerHTML = "";
+                    document.getElementById("submitForm").disabled = false;
+                }
+            }
+        </script>
     </head>
 
     <body>
         <div layout:fragment="content">
             <div style="width:80%; margin-top:20px;" class="d-inline-flex flex-column align-items-center">
-                <h3 class="d-inline-flex flex-row">Edit User</h3>
-                <form class="fw-lighter" action="#" th:action="@{/users/edit}" th:object="${user}" method="post" style="width: 100%;margin-bottom: 5px;font-size:12px;">
+                <h3 class="d-inline-flex flex-row" th:text="${user.userId &gt; 0 ? 'Edit User' : 'New User'}"></h3>
+                <form class="fw-lighter" action="#" th:action="@{/users/edit}" th:object="${user}" method="post"
+                    style="width: 100%;margin-bottom: 5px;font-size:12px;">
                     <div class="row gx-5 gy-0 m-auto">
                         <div class="col">
                             <label class="form-label">Username</label>
                             <input class="form-control form-control-sm" type="text" th:field="${user.username}"
                                 style="font-size:12px;" />
-                            <input hidden th:field="${user.userId}"/>
+                            <input hidden th:field="${user.userId}" />
                         </div>
                         <div class="col">
                             <label class="form-label">Name</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="text" th:field="${user.name}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="text"
+                                th:field="${user.name}" />
                         </div>
                         <div class="col">
                             <label class="form-label">Email</label>
-                            <input class="form-control form-control-sm" style="font-size:12px;" type="text" th:field="${user.email}" />
+                            <input class="form-control form-control-sm" style="font-size:12px;" type="text"
+                                th:field="${user.email}" />
                         </div>
                     </div>
                     <div class="row gx-5 gy-0 m-auto">
                         <div class="col"><label class="form-label">Hire Date</label>
-                            <input class="form-control form-control-sm" type="date" style="font-size:12px;" th:field="${user.hireDate}" />
+                            <input class="form-control form-control-sm" type="date" style="font-size:12px;"
+                                th:field="${user.hireDate}" />
                         </div>
                         <div class="col"><label class="form-label">Account Type</label>
-                            <select class="form-select form-select-sm" style="font-size:12px;" th:field="${user.accountType}">
+                            <select class="form-select form-select-sm" style="font-size:12px;"
+                                th:field="${user.accountType}">
                                 <option value=""></option>
                                 <option value="A">Admin</option>
                                 <option value="R">Regular</option>
                             </select>
                         </div>
                     </div>
+                    <div id="changePassword" name="changePassword" class="row gx-5 gy-0 m-auto"
+                        style="width:30%;padding-top:10px;">
+                        <div class="col">
+                            <label class="form-label">Temporary Password</label>
+                            <input class="form-control form-control-sm" id="newPass" name="newPass" th:required="${is_required} ? 'required' : null"
+                                onkeyup='passConfirm();' style="font-size:12px;" type="password" />
+                            <label class="form-label">Confirm Temporary Password</label>
+                            <input class="form-control form-control-sm" id="confirmNew" name="confirmNew" th:required="${is_required} ? 'required' : null"
+                                onkeyup='passConfirmNew();' style="font-size:12px;" type="password" />
+                            <span id="passMessage"></span>
+                        </div>
+                    </div>
                     <input class="btn border-dark btn-primary" type="submit"
                         style="margin-left: 50%;transform: translateX(-50%);margin-top: 20px;background: rgb(210,209,209);color: rgb(33,37,41);" />
                 </form>
-                <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success"></div>
+                <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-warning p-1" style="font-size:14px;margin-top:10px;"></div>
+                <div th:if="${successMessage}" th:text="${successMessage}" class="alert alert-success p-1" style="font-size:14px;margin-top:10px;"></div>
             </div>
         </div>
     </body>

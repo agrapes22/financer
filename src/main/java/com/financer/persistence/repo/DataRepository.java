@@ -6,7 +6,10 @@
  */
 package com.financer.persistence.repo;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +23,7 @@ public interface DataRepository extends JpaRepository<DataModel, Long> {
     @Query("SELECT d FROM data d WHERE report = :report")
     DataModel findDataByReportId(Report report);
 
+    @Transactional
+    @Modifying
+    int deleteByReport(Report report);
 }

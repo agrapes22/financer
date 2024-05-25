@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
@@ -26,6 +27,11 @@ public class Application{
     @Bean
     public LayoutDialect layoutDialect() {
         return new LayoutDialect();
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect(){
+        return new SpringSecurityDialect();
     }
 
 }

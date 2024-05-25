@@ -11,7 +11,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -71,6 +70,10 @@ public class DataService {
     public Type updateType(Type t) {
         return tr.save(t);
     }
+
+    public void deleteType(Type t) {
+        tr.delete(t);
+    }
     
     public Type getCustomerReportType() {
         return tr.findCustomerReportType();
@@ -98,6 +101,10 @@ public class DataService {
 
     public TimePeriod updateTimePeriod(TimePeriod timePeriod) {
         return tpr.save(timePeriod);
+    }
+
+    public void deleteTimePeriod(TimePeriod timePeriod) {
+        tpr.delete(timePeriod);
     }
 
     public List<Type> findAllRevenueTypes() {
@@ -376,6 +383,12 @@ public class DataService {
 
         }
         return rows;
+    }
+
+    public void deleteReportDataRecords(Report report) {
+        DataModel d = dr.findDataByReportId(report);
+        drr.deleteByData(d);
+        dr.deleteByReport(report);
     }
 
 }

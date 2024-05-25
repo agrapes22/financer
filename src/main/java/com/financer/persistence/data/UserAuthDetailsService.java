@@ -17,7 +17,7 @@ import com.financer.persistence.model.User;
 import com.financer.persistence.repo.UserRepository;
 
 @Service
-public class UserAuthService implements UserDetailsService  {
+public class UserAuthDetailsService implements UserDetailsService  {
 
     @Autowired
     UserRepository ur;
@@ -27,8 +27,8 @@ public class UserAuthService implements UserDetailsService  {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = ur.findByUsername(username);
-       
+        UserDetails user = ur.findByUsername(username);
+        
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
@@ -40,6 +40,16 @@ public class UserAuthService implements UserDetailsService  {
         newUser.setUsername(user.getUsername());
         newUser.setPasswordHash(encoder.encode(user.getPassword()));
         return ur.save(newUser);
+    }
+
+    public boolean checkIfOldPasswordValid(User u, String oldPassword) {
+        User user = ur.findByUserId(u.getUserId());
+        boolean check = encoder.matches(oldPassword, user.getPassword());
+        return check;
+    }
+
+    public void updatePassword(User u, String newPassword) {
+        ur.updatePassword(encoder.encode(newPassword), u.getUserId());
     }
 
 }

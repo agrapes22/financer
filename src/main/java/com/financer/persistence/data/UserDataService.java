@@ -40,5 +40,20 @@ public class UserDataService {
         return userRepo.save(t);
     }
     
+    public int updateName(User t) {
+        return userRepo.updateName(t.getName(), t.getUserId());
+    }
+
+    public List<User> findUsersBySearchTerm(String search) {
+        return userRepo.findByNameContainsIgnoreCaseOrUsernameContainsIgnoreCaseOrEmailContainsIgnoreCaseOrAccountTypeEqualsIgnoreCase(search, search, search, search);
+    }
+
+    public List<User> findRegularUsers() {
+        return userRepo.findRegularUsers();
+    }
+
+    public List<User> findAdminUsers() {
+        return userRepo.findAdminUsers();
+    }
 
 }

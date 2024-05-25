@@ -11,16 +11,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.financer.persistence.model.Customer;
 import com.financer.persistence.repo.CustomerRepository;
+import com.financer.persistence.repo.RevenueRepository;
 
 @Service
 public class CustomerDataService {
 
     @Autowired
     CustomerRepository customerRepo;
+
+    @Autowired
+    RevenueRepository rr;
 
     public List<Customer> findAll() {
         return customerRepo.findAll();
@@ -34,7 +39,7 @@ public class CustomerDataService {
         return customerRepo.save(t);
     }
 
-    public void delete(Customer t) {
+    public void delete(Customer t) throws DataIntegrityViolationException {
         customerRepo.delete(t);
     }
 
@@ -51,5 +56,13 @@ public class CustomerDataService {
 
         return customerRepo.findCustomersByIdsIn(formattedIds);
     }
+
+    public List<Customer> findCustomersBySearchTerm(String search) {
+        return customerRepo.findByNameContainsIgnoreCaseOrContactNameContainsIgnoreCase(search, search);
+    }
+
+    // public List<Revenue> findCustomerRevenues(Customer customer) {
+
+    // }
 
 }
